@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ddi.task.news.api.mapper.UserMapper">
+    <select id="countByEmail" parameterType="String" resultType="Integer">
+        SELECT COUNT(*)
+        FROM T_USER_MNG
+        WHERE EMAIL = #{email}
+    </select>
+
+    <insert id="insertUser" parameterType="SignupReqDto">
+        INSERT INTO T_USER_MNG
+        (
+            EMAIL
+            , PASSWORD
+            , NAME
+            , REG_DATE
+        ) VALUES (
+            #{email}
+            , #{password}
+            , #{name}
+            , NOW()
+        )
+    </insert>
+
+    <select id="findUserByEmail" parameterType="LoginReqDto" resultType="UserVo">
+        SELECT
+            USER_SN
+            , EMAIL
+            , PASSWORD
+            , NAME
+            , REG_DATE
+        FROM T_USER_MNG
+        WHERE EMAIL = #{email}
+    </select>
+</mapper>

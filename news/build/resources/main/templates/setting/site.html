@@ -1,0 +1,107 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<body class="text-center">
+    <div layout:fragment="content">
+        <div class="site-div">
+            <h1>수집 대상 뉴스 사이트 설정</h1>
+            <div class="content">
+                <label for="addSiteNm">사이트명:</label>
+                <input type="text" id="addSiteNm" name="addSiteNm" class="form_wrap" required>
+                <label for="addSitePath">사이트 주소:</label>
+                <input type="text" id="addSitePath" name="addSitePath" class="form_wrap" required>
+                <label for="addClassNm">수집할 a태그 클래스명:</label>
+                <input type="text" id="addClassNm" name="addClassNm" class="form_wrap" placeholder=".class (미입력: 모든 a태그)" required>
+                <button type="button" id="addSiteBtn" class="btn btn-primary">사이트 추가</button>
+            </div>
+            <br>
+            <ol id="dataList">
+            </ol>
+        </div>
+        <script>
+            $(document).ready(function() {
+                window.onload = () => {
+                    getData();
+                }
+
+                function getData() {
+                    $.ajax({
+                        url: '/site',
+                        type: 'GET',
+                        async : false,
+                        success: function (result) {
+                            var list = $('#dataList');
+                            list.empty();
+                            result.data.forEach(function(item) {
+                                list.append('<li class="list-item">' + item.siteNm + ': ' + item.sitePath + ' (' + '<Strong>' + item.classNm + '</Strong>' + ')' + '<button class="btn btn-danger delete-btn" data-sitesn="' + item.siteSn + '">삭제</button></li><br>');
+                            });
+                            $('.delete-btn').on('click', function() {
+                                var siteSn = $(this).data('sitesn');
+                                deleteData(siteSn);
+                            });
+                        },
+                        error: function (error) {
+                            console.log('[error]' + error.status);
+                            console.log('[error]' + error.responseText);
+                        }
+                    });
+                }
+
+                function deleteData(siteSn) {
+                    $.ajax({
+                        url: '/site',
+                        type: 'DELETE',
+                        data: {
+                            siteSn: siteSn,
+                        },
+                        async: false,
+                        success: function (result) {
+                            getData();
+                        },
+                        error: function (error) {
+                            console.log('[error]' + error.status);
+                            console.log('[error]' + error.responseText);
+                        }
+                    });
+                }
+
+                $("#addSiteBtn").on('click', function() {
+                    if ($("input[name='addSiteNm']").val().trim() === '') {
+                        alert('사이트명을 입력해 주세요.');
+                        $('#addSiteNm').focus();
+                        return false;
+                    }
+                    if ($("input[name='addSitePath']").val().trim() === '') {
+                        alert('사이트 주소를 입력해 주세요.');
+                        $('#addSitePath').focus();
+                        return false;
+                    }
+                    insertData($("input[name='addSiteNm']").val(), $("input[name='addSitePath']").val(), $("input[name='addClassNm']").val());
+                });
+
+                function insertData(addSiteNm, addSitePath, addClassNm) {
+                    $.ajax({
+                        url: '/site',
+                        type: 'POST',
+                        data: {
+                            siteNm: addSiteNm,
+                            sitePath: addSitePath,
+                            classNm: addClassNm,
+                        },
+                        async: false,
+                        success: function (result) {
+                            getData();
+                        },
+                        error: function (error) {
+                            alert(JSON.parse(error.responseText).message);
+                            console.log('[error]' + error.status);
+                            console.log('[error]' + error.responseText);
+                        }
+                    });
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

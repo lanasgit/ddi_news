@@ -1,0 +1,40 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<body class="text-center">
+    <div layout:fragment="content">
+        <div class="container">
+            <h1>수집 결과</h1>
+            <br>
+            <ol id="dataList">
+            </ol>
+        </div>
+        <script>
+            $(document).ready(function() {
+                window.onload = () => {
+                    getData();
+                }
+                function getData() {
+                    $.ajax({
+                        url: '/news',
+                        type: 'GET',
+                        async : false,
+                        success: function (result) {
+                            var list = $('#dataList');
+                            list.empty();
+                            result.data.forEach(function(item) {
+                                list.append('<li>' + item.title + '<a target=\'_blank\' href=' + item.href + '>' + ' 기사 보러가기</a>' + '</li>' + '<br>');
+                            });
+                        },
+                        error: function (error) {
+                            console.log('[error]' + error.status);
+                            console.log('[error]' + error.responseText);
+                        }
+                    });
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/default_layout}">
+<body class="text-center">
+    <div layout:fragment="content">
+        <div class="container">
+            <h1>수집 키워드 등록</h1>
+            최초 등록 시 1회 바로 수집 처리 됩니다.(수집 주기: 매시 정각)
+            <div class="content">
+                <label for="addKeyword">키워드:</label>
+                <input type="text" id="addKeyword" name="addKeyword" class="form_wrap" placeholder="코로나, 선거 등" required>
+                <button type="button" id="addKeywordBtn" class="btn btn-primary">키워드 추가</button>
+            </div>
+            <br>
+            <ol id="dataList">
+            </ol>
+        </div>
+        <script>
+            $(document).ready(function() {
+                window.onload = () => {
+                    getData();
+                }
+
+                function getData() {
+                    $.ajax({
+                        url: '/keyword',
+                        type: 'GET',
+                        async : false,
+                        success: function (result) {
+                            var list = $('#dataList');
+                            list.empty();
+                            result.data.forEach(function(item) {
+                                list.append('<li class="list-item">' + item + '<button class="btn btn-danger delete-btn" data-keyword="' + item + '">삭제</button></li><br>');
+                            });
+                            $('.delete-btn').on('click', function() {
+                                var keyword = $(this).data('keyword');
+                                deleteData(keyword);
+                            });
+                        },
+                        error: function (error) {
+                            console.log('[error]' + error.status);
+                            console.log('[error]' + error.responseText);
+                        }
+                    });
+                }
+
+                function deleteData(keyword) {
+                    $.ajax({
+                        url: '/keyword',
+                        type: 'DELETE',
+                        data: {
+                            keyword: keyword,
+                        },
+                        async: false,
+                        success: function (result) {
+                            getData();
+                        },
+                        error: function (error) {
+                            console.log('[error]' + error.status);
+                            console.log('[error]' + error.responseText);
+                        }
+                    });
+                }
+
+                $("#addKeywordBtn").on('click', function() {
+                    if ($("input[name='addKeyword']").val().trim() === '') {
+                        alert('키워드를 입력해 주세요.');
+                        $('#addKeyword').focus();
+                        return false;
+                    }
+                    insertData($("input[name='addKeyword']").val());
+                });
+
+                function insertData(keyword) {
+                    $.ajax({
+                        url: '/keyword',
+                        type: 'POST',
+                        data: {
+                            keyword: keyword,
+                        },
+                        async: false,
+                        success: function (result) {
+                            getData();
+                        },
+                        error: function (error) {
+                            alert(JSON.parse(error.responseText).message);
+                            console.log('[error]' + error.status);
+                            console.log('[error]' + error.responseText);
+                        }
+                    });
+                }
+            });
+        </script>
+    </div>
+</body>
+</html>

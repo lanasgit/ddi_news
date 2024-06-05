@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ddi.task.news.api.mapper.NewsMapper">
+    <select id="selectNewsList" resultType="NewsListResDto">
+        SELECT TITLE
+            , HREF
+        FROM T_NEWS_MNG
+        ORDER BY NEWS_SN DESC
+    </select>
+
+    <select id="selectKeywordList" resultType="String">
+        SELECT KEYWORD
+        FROM T_KEYWORD_MNG
+        ORDER BY KEYWORD_SN DESC
+    </select>
+
+    <select id="keywordExist" parameterType="String" resultType="Integer">
+        SELECT COUNT(*)
+        FROM T_KEYWORD_MNG
+        WHERE KEYWORD = #{keyword}
+    </select>
+
+    <insert id="insertKeyword" parameterType="String">
+        INSERT INTO T_KEYWORD_MNG
+        (
+            KEYWORD
+            , REG_DATE
+        ) VALUES (
+            #{keyword}
+            , NOW()
+        )
+    </insert>
+
+    <select id="newsExist" parameterType="NewsListResDto" resultType="Integer">
+        SELECT COUNT(*)
+        FROM T_NEWS_MNG
+        WHERE HREF = #{href}
+    </select>
+
+    <insert id="insertNews" parameterType="NewsListResDto">
+        INSERT INTO T_NEWS_MNG
+        (
+            TITLE
+            , HREF
+            , REG_DATE
+        ) VALUES (
+            #{title}
+            , #{href}
+            , NOW()
+         )
+    </insert>
+
+    <delete id="deleteKeyword" parameterType="String">
+        DELETE FROM T_KEYWORD_MNG
+        WHERE KEYWORD = #{keyword}
+    </delete>
+
+    <select id="selectSiteList" resultType="SiteListResDto">
+        SELECT SITE_SN
+            , SITE_NM
+            , SITE_PATH
+            , CLASS_NM
+        FROM T_SITE_MNG
+        ORDER BY SITE_SN DESC
+    </select>
+
+    <insert id="insertSite" parameterType="SiteAddReqDto">
+        INSERT INTO T_SITE_MNG
+        (
+            SITE_NM
+            , SITE_PATH
+            , CLASS_NM
+            , REG_DATE
+        ) VALUES (
+            #{siteNm}
+            , #{sitePath}
+            , #{classNm}
+            , NOW()
+        )
+    </insert>
+
+    <delete id="deleteSite" parameterType="Long">
+        DELETE FROM T_SITE_MNG
+        WHERE SITE_SN = #{siteSn}
+    </delete>
+</mapper>

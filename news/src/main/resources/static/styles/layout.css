@@ -1,0 +1,119 @@
+body {
+    align-items: center;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa;
+}
+
+header {
+    padding: 20px 0px;
+    font-size: 24px;
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font-weight: bolder;
+}
+
+.container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    width: 60%;
+    max-width: 700px;
+    margin-top: 50px;
+}
+
+.content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px;
+}
+
+.content label {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.content input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.content .btn {
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #007bff;
+    color: white;
+    cursor: pointer;
+}
+
+.content .btn:hover {
+    background-color: #0056b3;
+}
+
+.site-div {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-top: 50px;
+}
+
+.list-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
+}
+
+.list-item .delete-btn {
+    margin-left: auto;
+    padding: 0.3rem 0.6rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #dc3545;
+    color: white;
+    cursor: pointer;
+}
+
+.list-item .delete-btn:hover {
+    background-color: #c82333;
+}
+
+.navbar {
+    padding: 0px;
+}
+
+.nav-link,
+.nav-link:hover {
+    color: white;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: white;
+}
+
+.navbar-dark .navbar-nav > .active > a {
+    color: orange;
+    background-color: transparent;
+}
+
+@media (min-width: 768px) {
+    .main {
+        padding-left: 160px;
+    }
+}
+
+.form_wrap {
+    background-color: #fff;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+    line-height: 1.8;
+    width: 30%;
+}
